@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const sceneSelectLabel = document.getElementById("scene-select-label");
   const sceneBullets = document.getElementById("scene-bullets");
   const sceneVisual = document.getElementById("scene-visual");
+  const sceneWooshUp = document.getElementById("scene-woosh-up");
+  const sceneWooshLeft = document.getElementById("scene-woosh-left");
+  const sceneWooshDown = document.getElementById("scene-woosh-down");
+  const sceneWooshRight = document.getElementById("scene-woosh-right");
   const sceneEmbed = document.getElementById("scene-embed");
   const sceneEmbedFrame = document.getElementById("scene-embed-frame");
   const timelinePath = document.getElementById("timeline-path");
@@ -13,6 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("timeline-dot-3")
   ];
   const sceneButtons = Array.from(document.querySelectorAll(".overview-segment"));
+  let activeSceneIndex = 0;
+  let activeScene = null;
+  let steamOverlayPlayed = false;
+  let steamSequenceStarted = false;
+  let steamSequenceToken = 0;
+  let steamSequenceTimers = [];
+  let lastVisualTime = 0;
 
   function toDrivePreviewUrl(url) {
     if (!url) {
@@ -82,18 +93,261 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function clearSteamSequenceTimers() {
+    steamSequenceTimers.forEach((timerId) => window.clearTimeout(timerId));
+    steamSequenceTimers = [];
+  }
+
+  function hideSteamOverlays() {
+    [sceneWooshUp, sceneWooshLeft, sceneWooshDown, sceneWooshRight].forEach((el) => {
+      if (!el) {
+        return;
+      }
+
+      el.hidden = true;
+      el.removeAttribute("src");
+    });
+  }
+
+  function clearSteamOverlay() {
+    clearSteamSequenceTimers();
+    steamSequenceStarted = false;
+    hideSteamOverlays();
+  }
+
+  function setOverlaySrc(img, src) {
+    if (!img || !src) {
+      return;
+    }
+
+    const url = new URL(src, window.location.href);
+    url.searchParams.set("v", String(steamSequenceToken));
+    img.src = url.href;
+  }
+
+  function playSteamSequence(scene) {
+    if (!scene) {
+      return;
+    }
+
+    const upSrc = typeof scene.wooshUpSrc === "string" ? scene.wooshUpSrc.trim() : "";
+    const downSrc = typeof scene.wooshDownSrc === "string" ? scene.wooshDownSrc.trim() : "";
+    const upDelayMs = Number.isFinite(scene.wooshUpDelayMs) ? scene.wooshUpDelayMs : 0;
+    const leftDelayMs = Number.isFinite(scene.wooshLeftDelayMs) ? scene.wooshLeftDelayMs : upDelayMs;
+    const downDelayMs = Number.isFinite(scene.wooshDownDelayMs) ? scene.wooshDownDelayMs : 900;
+    const rightDelayMs = Number.isFinite(scene.wooshRightDelayMs) ? scene.wooshRightDelayMs : downDelayMs;
+    const rightDelayMs2 = Number.isFinite(scene.wooshRightDelayMs2) ? scene.wooshRightDelayMs2 : -1;
+    const wooshDurationMs = Number.isFinite(scene.wooshDurationMs) ? scene.wooshDurationMs : 900;
+    const wooshLeftMs = Number.isFinite(scene.wooshLeftMs) ? scene.wooshLeftMs : wooshDurationMs;
+    const wooshRightMs = Number.isFinite(scene.wooshRightMs) ? scene.wooshRightMs : wooshDurationMs;
+    const wooshRightMs2 = Number.isFinite(scene.wooshRightMs2) ? scene.wooshRightMs2 : wooshRightMs;
+
+    if (!upSrc && !downSrc) {
+      return;
+    }
+
+    clearSteamSequenceTimers();
+    hideSteamOverlays();
+    steamSequenceStarted = true;
+    steamSequenceToken += 1;
+    let sequenceEndMs = 0;
+
+    if (upSrc) {
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene) {
+            return;
+          }
+
+          setOverlaySrc(sceneWooshUp, upSrc);
+          sceneWooshUp.hidden = false;
+        }, upDelayMs)
+      );
+
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene || !sceneWooshUp) {
+            return;
+          }
+
+          sceneWooshUp.hidden = true;
+        }, upDelayMs + wooshDurationMs)
+      );
+
+      sequenceEndMs = Math.max(sequenceEndMs, upDelayMs + wooshDurationMs);
+    }
+
+    if (upSrc && sceneWooshLeft) {
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene) {
+            return;
+          }
+
+          setOverlaySrc(sceneWooshLeft, upSrc);
+          sceneWooshLeft.hidden = false;
+        }, leftDelayMs)
+      );
+
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene) {
+            return;
+          }
+
+          sceneWooshLeft.hidden = true;
+        }, leftDelayMs + wooshLeftMs)
+      );
+
+      sequenceEndMs = Math.max(sequenceEndMs, leftDelayMs + wooshLeftMs);
+    }
+
+    if (downSrc) {
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene) {
+            return;
+          }
+
+          setOverlaySrc(sceneWooshDown, downSrc);
+          sceneWooshDown.hidden = false;
+        }, downDelayMs)
+      );
+
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene || !sceneWooshDown) {
+            return;
+          }
+
+          sceneWooshDown.hidden = true;
+        }, downDelayMs + wooshDurationMs)
+      );
+
+      sequenceEndMs = Math.max(sequenceEndMs, downDelayMs + wooshDurationMs);
+    }
+
+    if (downSrc && sceneWooshRight) {
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene) {
+            return;
+          }
+
+          setOverlaySrc(sceneWooshRight, downSrc);
+          sceneWooshRight.hidden = false;
+        }, rightDelayMs)
+      );
+
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene) {
+            return;
+          }
+
+          sceneWooshRight.hidden = true;
+        }, rightDelayMs + wooshRightMs)
+      );
+
+      sequenceEndMs = Math.max(sequenceEndMs, rightDelayMs + wooshRightMs);
+
+      if (rightDelayMs2 >= 0) {
+        steamSequenceTimers.push(
+          window.setTimeout(() => {
+            if (activeSceneIndex !== 0 || activeScene !== scene) {
+              return;
+            }
+
+            setOverlaySrc(sceneWooshRight, downSrc);
+            sceneWooshRight.hidden = false;
+          }, rightDelayMs2)
+        );
+
+        steamSequenceTimers.push(
+          window.setTimeout(() => {
+            if (activeSceneIndex !== 0 || activeScene !== scene) {
+              return;
+            }
+
+            sceneWooshRight.hidden = true;
+          }, rightDelayMs2 + wooshRightMs2)
+        );
+
+        sequenceEndMs = Math.max(sequenceEndMs, rightDelayMs2 + wooshRightMs2);
+      }
+    }
+
+    if (sequenceEndMs > 0) {
+      steamSequenceTimers.push(
+        window.setTimeout(() => {
+          if (activeSceneIndex !== 0 || activeScene !== scene) {
+            return;
+          }
+
+          hideSteamOverlays();
+          steamOverlayPlayed = true;
+          steamSequenceStarted = false;
+          clearSteamSequenceTimers();
+        }, sequenceEndMs)
+      );
+    }
+  }
+
+  function syncSteamOverlay() {
+    if (!sceneVisual || !activeScene) {
+      return;
+    }
+
+    const upSrc = typeof activeScene.wooshUpSrc === "string" ? activeScene.wooshUpSrc.trim() : "";
+    const downSrc = typeof activeScene.wooshDownSrc === "string" ? activeScene.wooshDownSrc.trim() : "";
+    const steamUntil = Number.isFinite(activeScene.steamUntil) ? activeScene.steamUntil : 0;
+    const withinWindow =
+      activeSceneIndex === 0 &&
+      (upSrc || downSrc) &&
+      !steamOverlayPlayed &&
+      sceneVisual.currentTime <= steamUntil;
+
+    if (!withinWindow) {
+      if (sceneVisual.currentTime > steamUntil) {
+        steamOverlayPlayed = true;
+      }
+
+      if (!steamSequenceStarted) {
+        hideSteamOverlays();
+      }
+
+      return;
+    }
+
+    if (!steamSequenceStarted) {
+      playSteamSequence(activeScene);
+    }
+  }
+
   const scenes = [
     {
       title: "THE MOVING CASTLE EMERGES",
       animSrc: "assets/animations/anim1.mp4",
+      wooshUpSrc: "assets/animations/wooshUp.gif",
+      wooshDownSrc: "assets/animations/wooshDown.gif",
+      wooshUpDelayMs: 2000,
+      wooshLeftDelayMs: 4000,
+      wooshRightDelayMs: 4000,
+      wooshRightDelayMs2: 6000,
+      wooshDownDelayMs: 7000,
+      wooshDurationMs: 900,
+      wooshRightMs: 900,
+      wooshRightMs2: 900,
+      steamUntil: 8.5,
       clipEmbed: "https://drive.google.com/file/d/1qhKMBtasxKoA_uFTc6cFB-1naBlMBKZz/view?usp=sharing",
       description:
         "Short scene description",
       bullets: [
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight"
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "I might just scrap this section lolol"
       ],
       timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
       timelineDots: [
@@ -110,10 +364,11 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Short scene description",
       bullets: [
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight"
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "I might just scrap this section lolol"
       ],
       timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
       timelineDots: [
@@ -129,10 +384,11 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Short scene description",
       bullets: [
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight"
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "I might just scrap this section lolol"
       ],
       timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
       timelineDots: [
@@ -148,10 +404,11 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Short scene description",
       bullets: [
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight"
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "I might just scrap this section lolol"
       ],
       timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
       timelineDots: [
@@ -167,10 +424,11 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Short scene description",
       bullets: [
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight",
-        "Description of symbol + brief analytical insight"
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "Description and/or brief analytical insight",
+        "I might just scrap this section lolol"
       ],
       timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
       timelineDots: [
@@ -187,6 +445,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!scene) {
       return;
     }
+
+    activeSceneIndex = index;
+    activeScene = scene;
+    steamOverlayPlayed = false;
+    steamSequenceStarted = false;
+    lastVisualTime = 0;
 
     if (sceneTitle) {
       sceneTitle.textContent = scene.title;
@@ -219,6 +483,13 @@ document.addEventListener("DOMContentLoaded", () => {
         sceneVisual.removeAttribute("src");
         sceneVisual.load();
       }
+    }
+
+    if (!scene.wooshUpSrc && !scene.wooshDownSrc) {
+      clearSteamOverlay();
+    } else {
+      clearSteamOverlay();
+      syncSteamOverlay();
     }
 
     const clipSource = resolveClipSource(scene);
@@ -276,6 +547,24 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  if (sceneVisual) {
+    sceneVisual.addEventListener("timeupdate", () => {
+      if (activeSceneIndex === 0 && sceneVisual.currentTime + 0.35 < lastVisualTime) {
+        steamOverlayPlayed = false;
+        steamSequenceStarted = false;
+        clearSteamOverlay();
+      }
+
+      lastVisualTime = sceneVisual.currentTime;
+      syncSteamOverlay();
+    });
+    sceneVisual.addEventListener("play", syncSteamOverlay);
+    sceneVisual.addEventListener("seeked", syncSteamOverlay);
+    sceneVisual.addEventListener("pause", () => {
+      clearSteamOverlay();
+    });
+  }
 
   renderScene(0);
 });
