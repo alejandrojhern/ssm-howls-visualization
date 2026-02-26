@@ -17,17 +17,6 @@
       <div class="bg-overlay"></div>
 
       <div class="header-controls">
-        <section class="legend" aria-labelledby="legend-title">
-          <h2 id="legend-title">KEY / LEGEND</h2>
-          <ul class="legend-list">
-            <li>Symbol: Description</li>
-            <li>Symbol: Description</li>
-            <li>Symbol: Description</li>
-            <li>Symbol: Description</li>
-            <li>Symbol: Description</li>
-          </ul>
-        </section>
-
         <aside class="overview-panel" aria-labelledby="overview-title">
           <p id="overview-title" class="overview-title">KEY MOMENTS</p>
           <div class="overview-circle" role="group" aria-label="Select scene section">
@@ -48,6 +37,12 @@
             </button>
           </div>
         </aside>
+
+        <section class="header-scene" aria-labelledby="scene-title">
+          <p id="scene-select-label" class="scene-select-label">SELECT 01</p>
+          <h2 id="scene-title">Title</h2>
+          <p id="scene-description" class="header-scene-thesis">Thesis</p>
+        </section>
       </div>
     </header>
 
@@ -56,17 +51,22 @@
         <div class="scene-grid">
           <div class="scene-media-column">
             <svg id="scene-timeline" class="scene-timeline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              <circle id="timeline-dot-1" cx="18" cy="45" r="2.2" />
-              <circle id="timeline-dot-2" cx="50" cy="61" r="2.2" />
-              <circle id="timeline-dot-3" cx="82" cy="28" r="2.2" />
             </svg>
-            <div class="media-placeholder" role="img" aria-label="Visualization panel">
+            <div class="media-placeholder" aria-label="Visualization panel">
+              <video
+                id="scene-visual"
+                playsinline
+                muted
+                autoplay
+                loop
+                preload="metadata"
+                aria-label="Visualization animation"
+              ></video>
             </div>
           </div>
 
           <div class="scene-key-column">
-            <h2 id="scene-title">Title</h2>
-            <p id="scene-description">Text</p>
+            <p class="scene-points-label">Analysis Points</p>
             <ul id="scene-bullets" class="scene-bullets" aria-label="Scene key points">
               <li>Key</li>
               <li>Key</li>
@@ -76,8 +76,14 @@
           </div>
 
           <div class="scene-clip-column" aria-label="Embedded clip panel">
-            <div class="clip-embed-placeholder" role="img" aria-label="Embedded clip container">
-              <span id="clip-placeholder-label">Embedded</span>
+            <div class="clip-embed-placeholder" aria-label="Embedded clip container">
+              <video
+                id="scene-embed"
+                playsinline
+                controls
+                preload="metadata"
+                aria-label="Embedded clip"
+              ></video>
             </div>
           </div>
 
