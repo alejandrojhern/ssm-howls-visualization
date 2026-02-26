@@ -134,37 +134,56 @@ function getDialogueRailState(sceneIndex, t) {
         const p = railMover(t, { rate: 0.33, duty: 0.84, offset: 0.14, jitter: 0.08, yJitter: 0.05 });
         return { lineOpacity: 0.24, beads: p ? [{ ...p, size: 8, opacity: 0.88, blur: 0, color: "rgba(66,72,80,.95)" }] : [] };
       }
-      if (t < 15) {
+      if (t < 9) {
         const p = railMover(t, { rate: 0.5, duty: 0.9, offset: 0.16, jitter: 1.9, yJitter: 1.3, jitterFreq: 18 });
         return { lineOpacity: 0.25, beads: p ? [{ ...p, size: 12, opacity: 0.93, blur: 0.7, color: "rgba(80,88,99,.95)" }] : [] };
       }
-      const p = railMover(t, { rate: 0.18, duty: 0.56, offset: 0.12, jitter: 0.18, yJitter: 0.1 });
+      const p = railMover(t, { rate: 0.1, duty: 0.18, offset: 0.12, jitter: 0.12, yJitter: 0.06 });
+      const lateFade = clamp((t - 9) / 11, 0, 1);
       return {
-        lineOpacity: 0.2,
-        beads: p ? [{ ...p, size: 11, opacity: 0.58, blur: 1.3, color: "rgba(95,76,124,.85)" }] : []
+        lineOpacity: lerp(0.18, 0.1, lateFade),
+        beads: p
+          ? [
+              {
+                ...p,
+                size: lerp(10.5, 8.2, lateFade),
+                opacity: lerp(0.42, 0.18, lateFade),
+                blur: lerp(1.0, 1.8, lateFade),
+                color: "rgba(95,76,124,.78)"
+              }
+            ]
+          : []
       };
     }
     case 3: {
       if (t < 10) {
-        const count = Math.sin(t * 0.9) > -0.15 ? 2 : 1;
+        const afterSeven = t >= 7;
+        const count = afterSeven ? (Math.sin(t * 1.4) > -0.55 ? 3 : 2) : (Math.sin(t * 0.9) > -0.15 ? 2 : 1);
         const p1 = railMover(t, { rate: 0.28, duty: 0.58, offset: 0.07, jitter: 0.35, yJitter: 0.2, jitterFreq: 9 });
         const p2 = railMover(t, { rate: 0.23, duty: 0.42, offset: 0.53, jitter: 0.25, yJitter: 0.15, jitterFreq: 7 });
+        const p3 = afterSeven
+          ? railMover(t, { rate: 0.2, duty: 0.34, offset: 0.28, jitter: 0.22, yJitter: 0.12, jitterFreq: 8 })
+          : null;
         return {
           lineOpacity: 0.22,
           beads: [
-            p1 && { ...p1, size: 8, opacity: 0.76, blur: 0.15, color: "rgba(70,78,88,.92)" },
-            count > 1 && p2 && { ...p2, size: 7, opacity: 0.68, blur: 0.2, color: "rgba(70,78,88,.82)" }
+            p1 && { ...p1, size: 8, opacity: afterSeven ? 0.56 : 0.76, blur: afterSeven ? 0.22 : 0.15, color: "rgba(70,78,88,.92)" },
+            count > 1 && p2 && { ...p2, size: 7, opacity: afterSeven ? 0.48 : 0.68, blur: afterSeven ? 0.28 : 0.2, color: "rgba(70,78,88,.82)" },
+            count > 2 && p3 && { ...p3, size: 7.5, opacity: 0.42, blur: 0.34, color: "rgba(70,78,88,.72)" }
           ].filter(Boolean)
         };
       }
       const fade = clamp((t - 10) / 10, 0, 1);
       const p1 = railMover(t, { rate: 0.18, duty: 0.36, offset: 0.13, jitter: 0.12, yJitter: 0.08 });
       const p2 = railMover(t, { rate: 0.14, duty: 0.28, offset: 0.58, jitter: 0.08, yJitter: 0.05 });
+      const p3 = railMover(t, { rate: 0.12, duty: 0.22, offset: 0.34, jitter: 0.06, yJitter: 0.04 });
+      const count = Math.sin(t * 1.7) > -0.35 ? 3 : 2;
       return {
         lineOpacity: lerp(0.22, 0.16, fade),
         beads: [
-          p1 && { ...p1, size: 8, opacity: lerp(0.65, 0.48, fade), blur: lerp(0.4, 0.8, fade), color: "rgba(88,100,112,.85)" },
-          p2 && { ...p2, size: 7, opacity: lerp(0.58, 0.4, fade), blur: lerp(0.5, 0.9, fade), color: "rgba(88,100,112,.78)" }
+          p1 && { ...p1, size: 8, opacity: lerp(0.5, 0.34, fade), blur: lerp(0.45, 0.9, fade), color: "rgba(88,100,112,.85)" },
+          count > 1 && p2 && { ...p2, size: 7, opacity: lerp(0.42, 0.28, fade), blur: lerp(0.55, 1.0, fade), color: "rgba(88,100,112,.78)" },
+          count > 2 && p3 && { ...p3, size: 7.2, opacity: lerp(0.34, 0.2, fade), blur: lerp(0.65, 1.15, fade), color: "rgba(88,100,112,.68)" }
         ].filter(Boolean)
       };
     }
