@@ -605,12 +605,12 @@ body {
   max-height: 270px;
   padding: 0.9rem 1rem;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 2px;
   background:
-    radial-gradient(circle at 25% 15%, rgba(255, 255, 255, 0.05), transparent 55%),
-    radial-gradient(circle at 80% 85%, rgba(0, 0, 0, 0.22), transparent 60%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0)),
-    var(--panel-2);
+    radial-gradient(circle at 22% 14%, rgba(255, 228, 187, 0.16), transparent 56%),
+    radial-gradient(circle at 84% 84%, rgba(171, 63, 20, 0.18), transparent 62%),
+    linear-gradient(180deg, rgba(255, 245, 227, 0.05), rgba(255, 255, 255, 0)),
+    linear-gradient(160deg, rgba(220, 129, 59, 0.16), rgba(191, 86, 28, 0.1));
 }
 
 .legend-title {
