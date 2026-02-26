@@ -91,7 +91,8 @@ body {
 .header-controls {
   position: relative;
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) 220px;
+  grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.55fr) minmax(220px, 0.9fr);
+  gap: 1rem;
   align-items: start;
   width: 100%;
   margin: 0 auto;
@@ -164,11 +165,12 @@ body {
 .overview-panel {
   position: relative;
   grid-column: 3;
-  justify-self: end;
+  justify-self: center;
   align-self: start;
   top: 0;
   right: 0;
-  width: 220px;
+  width: 100%;
+  max-width: 310px;
   display: grid;
   justify-items: center;
   gap: 0.35rem;
