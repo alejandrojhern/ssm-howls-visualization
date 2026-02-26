@@ -11,33 +11,12 @@
     <header class="page-header">
       <div class="header-copy">
         <h1>Howl's Moving Castle</h1>
-        <p class="subtitle">Analytical Visualization by Patrick Hedgecock and Alejandro Hernandez</p>
+        <p class="subtitle">Analytical Visualization by Alejandro Hernandez and Patrick Hedgecock</p>
       </div>
 
       <div class="bg-overlay"></div>
 
       <div class="header-controls">
-        <aside class="overview-panel" aria-labelledby="overview-title">
-          <p id="overview-title" class="overview-title">KEY MOMENTS</p>
-          <div class="overview-circle" role="group" aria-label="Select scene section">
-            <button type="button" class="overview-segment segment-1" data-scene-index="0" aria-pressed="true" aria-label="Select Scene 1">
-              <span>1</span>
-            </button>
-            <button type="button" class="overview-segment segment-2" data-scene-index="1" aria-pressed="false" aria-label="Select Scene 2">
-              <span>2</span>
-            </button>
-            <button type="button" class="overview-segment segment-3" data-scene-index="2" aria-pressed="false" aria-label="Select Scene 3">
-              <span>3</span>
-            </button>
-            <button type="button" class="overview-segment segment-4" data-scene-index="3" aria-pressed="false" aria-label="Select Scene 4">
-              <span>4</span>
-            </button>
-            <button type="button" class="overview-segment segment-5" data-scene-index="4" aria-pressed="false" aria-label="Select Scene 5">
-              <span>5</span>
-            </button>
-          </div>
-        </aside>
-
         <section class="header-scene" aria-labelledby="scene-title">
           <p id="scene-select-label" class="scene-select-label">SELECT 01</p>
           <h2 id="scene-title">Title</h2>
@@ -54,6 +33,16 @@
             </svg>
             <div class="media-placeholder" aria-label="Visualization panel">
               <video
+                id="scene-visual-fill"
+                playsinline
+                muted
+                autoplay
+                loop
+                preload="metadata"
+                aria-hidden="true"
+                hidden
+              ></video>
+              <video
                 id="scene-visual"
                 playsinline
                 muted
@@ -62,6 +51,22 @@
                 preload="metadata"
                 aria-label="Visualization animation"
               ></video>
+              <video
+                id="scene-visual-overlay"
+                playsinline
+                muted
+                autoplay
+                loop
+                preload="metadata"
+                aria-hidden="true"
+                hidden
+              ></video>
+              <div id="dialogue-rail" class="dialogue-rail" aria-hidden="true">
+                <div class="dialogue-rail-line"></div>
+                <span class="dialogue-bead" id="dialogue-bead-1"></span>
+                <span class="dialogue-bead" id="dialogue-bead-2"></span>
+                <span class="dialogue-bead" id="dialogue-bead-3"></span>
+              </div>
               <img
                 id="scene-woosh-up"
                 class="scene-steam-overlay scene-steam-overlay--up"
@@ -94,13 +99,26 @@
           </div>
 
           <div class="scene-key-column">
-            <p class="scene-points-label">Analysis Points</p>
-            <ul id="scene-bullets" class="scene-bullets" aria-label="Scene key points">
-              <li>Key</li>
-              <li>Key</li>
-              <li>Key</li>
-              <li>Key</li>
-            </ul>
+            <aside class="overview-panel" aria-labelledby="overview-title">
+              <p id="overview-title" class="overview-title">KEY MOMENTS</p>
+              <div class="overview-circle" role="group" aria-label="Select scene section">
+                <button type="button" class="overview-segment segment-1" data-scene-index="0" aria-pressed="true" aria-label="Select Scene 1">
+                  <span>1</span>
+                </button>
+                <button type="button" class="overview-segment segment-2" data-scene-index="1" aria-pressed="false" aria-label="Select Scene 2">
+                  <span>2</span>
+                </button>
+                <button type="button" class="overview-segment segment-3" data-scene-index="2" aria-pressed="false" aria-label="Select Scene 3">
+                  <span>3</span>
+                </button>
+                <button type="button" class="overview-segment segment-4" data-scene-index="3" aria-pressed="false" aria-label="Select Scene 4">
+                  <span>4</span>
+                </button>
+                <button type="button" class="overview-segment segment-5" data-scene-index="4" aria-pressed="false" aria-label="Select Scene 5">
+                  <span>5</span>
+                </button>
+              </div>
+            </aside>
           </div>
 
           <div class="scene-clip-column" aria-label="Embedded clip panel">
@@ -126,6 +144,9 @@
     </main>
   </div>
 
+  <script src="js/sceneContent.js"></script>
+  <script src="js/runtimeUtils.js"></script>
+  <script src="js/visualFillUtils.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
