@@ -278,7 +278,7 @@ const scenes = [
     animFillMode: "overlay",
     clipEmbed: "https://drive.google.com/file/d/12dXN0QxMD9g4po8prHh29_oWz261kuzz/view?usp=drive_link",
     description:
-      "There's never true silence inside Howl's castle, Calcifer constantly crackling among the structure's groans, the sound of pots clashing together, and Howl's clothes swooshing as he moves through the space. The SFX layers dissolve into the musical pulse of the castle. The castle door's distinct switching sound is also introduced here, repeating constantly until it's anchored in our ears so that when we later hear it offscreen, we know Howl has arrived without seeing him.",
+      "There's never true silence inside Howl's castle, Calcifer's constantly crackling among the structure's groans, the sound of pots clashing together, and Howl's clothes swooshing as he moves through the space. The castle door's distinct switching chime is also introduced here, repeating constantly until it's anchored in our ears so that when we later hear it offscreen, we know Howl has arrived without seeing him.",
     timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
     timelineDots: [
       { cx: 18, cy: 45 },
