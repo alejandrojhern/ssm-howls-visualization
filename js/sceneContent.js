@@ -263,7 +263,7 @@ const scenes = [
     animFillMode: "overlay",
     clipEmbed: "https://drive.google.com/file/d/1nXqnPPSM_d1fwA54DTlCm_mNAvgY597D/view?usp=drive_link",
     description:
-      "The Witch of the Waste follows Sophie home and curses her, immediately adding seventy-two-years to her age. Sophie’s transformation happens alongside a shift in her vocal timbre that reflects her new physical state. After, she passes through the quiet town to board a train, and the film barely acknowledges sonically what just happened to her",
+      "The Witch of the Waste follows Sophie home and curses her, immediately adding seventy-two-years to her age. Sophie’s transformation happens alongside a shift in her vocal timbre that reflects her new physical state. After, she passes through the quiet town to board a train as the score barely acknowledges what just happened to her",
     timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
     timelineDots: [
       { cx: 18, cy: 45 },
