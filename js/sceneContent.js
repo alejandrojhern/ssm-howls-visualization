@@ -248,7 +248,7 @@ const scenes = [
     clipSrc: "assets/clips/moment2.mp4",
     clipEmbed: "https://drive.google.com/file/d/1NwOAABfOm_7dLhLYMa8byHK_T8GkCdsN/view?usp=drive_link",
     description:
-      "Sophie is moving through a crowded street, the city around her alive with horses, steam, and the murmur of a crowd. When she's stopped by soldiers,  Howl appears and pulls her from the crowd as the world sonically recedes. The score also softens to match what Sophie is feeling.",
+      "Sophie is moving through a crowded street, the city around her alive with horses, steam, and the murmur of a crowd. When she's stopped by soldiers,  Howl appears and pulls her from the crowd as the world sonically recedes. The score also softens to match what Sophie is feeling before livening up to emphasize Howl’s wonder.",
     timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
     timelineDots: [
       { cx: 18, cy: 45 },
@@ -263,7 +263,7 @@ const scenes = [
     animFillMode: "overlay",
     clipEmbed: "https://drive.google.com/file/d/1nXqnPPSM_d1fwA54DTlCm_mNAvgY597D/view?usp=drive_link",
     description:
-      "The Witch of the Waste follows Sophie home and curses her, immediately adding seventy-two-years to her age. Sophie’s transformation happens alongside a shift in her vocal timbre that reflects her new physical state. After, she passes through the quiet town to board a train as the score barely acknowledges what just happened to her",
+      "The Witch of the Waste follows Sophie home and curses her, immediately adding seventy-two-years to her age. Sophie’s transformation happens alongside a shift in her vocal timbre that reflects her new physical state. After, she freaks out a bit before passing through the quiet town to board a train as the score barely acknowledges what just happened to her.",
     timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
     timelineDots: [
       { cx: 18, cy: 45 },
@@ -293,7 +293,7 @@ const scenes = [
     animFillMode: "overlay",
     clipEmbed: "https://drive.google.com/file/d/1r9N-lNlyQcDT4rjkrFPaAYCRprJVO6pq/view?usp=drive_link",
     description:
-      "Later in the film, Howl we see howl mutate into his massive, bird creature form, a war nobody chose forcing his hand. Explosions, alarms, and distorted animal sounds compete with dialogue and a frantic symphony as the city becomes rubble. The lively ambience the film spent its first half establishing is suddenly swallowed by a cloud of smoke.",
+      "Later in the film, we see Howl mutate into his massive, bird creature form, a war nobody chose forcing his hand. Explosions, alarms, and distorted animal sounds compete with dialogue and a frantic symphony as the city becomes rubble. The lively ambience the film spent its first half establishing is suddenly swallowed by a cloud of smoke.",
     timelinePath: "M2,68 C20,20 42,88 64,38 C76,12 88,72 98,46",
     timelineDots: [
       { cx: 18, cy: 45 },
